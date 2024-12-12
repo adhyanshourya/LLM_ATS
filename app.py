@@ -91,3 +91,17 @@ if submit:
                 - **Profile Summary:** {result['Profile Summary']}
                 """
             )
+# Additional Information Section
+st.write("---")
+st.markdown(
+    "<p style='text-align: center; font-size: 14px;'><strong>Ideation:</strong> Manju Vellaichamy</p>",
+    unsafe_allow_html=True,
+)
+st.markdown(
+    "<p style='text-align: center; font-size: 14px;'><strong>Solution and Implementation:</strong> Ajay kr. Mishra</p>",
+    unsafe_allow_html=True,
+)
+st.markdown(
+    "<p style='text-align: center; font-size: 14px;'><strong>Reviewed:</strong> Meenakshinathan K</p>",
+    unsafe_allow_html=True,
+)
