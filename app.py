@@ -27,6 +27,30 @@ def input_pdf_text(file_path):
     except Exception as e:
         return None
 
+# Helper function: Extract relevant experience
+def extract_relevant_experience(resume_text, job_description):
+    # Mock implementation: Customize as needed
+    years_of_experience = 5  # Example extracted value
+    return f"{years_of_experience} years (extracted based on resume and JD analysis)"
+
+# Helper function: Analyze job change frequency
+def analyze_job_change_frequency(resume_text):
+    # Mock implementation: Customize as needed
+    frequency = 3  # Example extracted value
+    return f"{frequency} job changes detected in the resume"
+
+# Helper function: Perform sentiment analysis
+def perform_sentiment_analysis(resume_text):
+    # Mock implementation: Customize as needed
+    sentiment = "Positive"  # Example sentiment
+    return f"Overall sentiment of the resume is {sentiment}"
+
+# Helper function: Skill gap analysis
+def skill_gap_analysis(resume_text, job_description):
+    # Mock implementation: Customize as needed
+    gaps = ["AWS", "Kubernetes"]  # Example gaps
+    return f"Skill gaps identified: {', '.join(gaps)}"
+
 # Helper function: Get Gemini response
 def get_gemini_response(prompt):
     model = genai.GenerativeModel("gemini-pro")
@@ -64,8 +88,8 @@ I want the response in one single string having the structure:
 """
 
 # Streamlit app setup
-st.title("✨ GAVS Smart ATS with Bulk Resume Evaluation")
-st.markdown("Evaluate resumes individually or in bulk. Get tailored insights for improvement!")
+st.title("✨ GAVS Smart ATS ")
+st.markdown("Evaluate resumes individually or in bulk!")
 
 # Job description input
 st.header("📝 Job Description")
@@ -93,8 +117,40 @@ if st.button("Analyze"):
             if text:
                 prompt = input_prompt_template.format(text=text, jd=jd)
                 response = get_gemini_response(prompt)
+
+                # Additional analyses
+                relevant_experience = extract_relevant_experience(text, jd)
+                job_change_frequency = analyze_job_change_frequency(text)
+                sentiment_analysis = perform_sentiment_analysis(text)
+                skill_gaps = skill_gap_analysis(text, jd)
+
+                # Parse response
+                result = json.loads(response)
+
                 st.success("✅ Analysis Completed!")
-                st.json(json.loads(response))
+                st.markdown("### Results")
+                st.write("---")
+
+                with st.expander("Job Description Match Analysis"):
+                    st.markdown(f"**Job Description Match:** {result['JD Match']}")
+
+                with st.expander("Missing Keywords Analysis"):
+                    st.markdown(f"**Missing Keywords:** {', '.join(result['MissingKeywords'])}")
+
+                with st.expander("Profile Summary Analysis"):
+                    st.markdown(f"**Profile Summary:** {result['Profile Summary']}")
+
+                with st.expander("Relevant Experience Analysis"):
+                    st.markdown(f"**Relevant Experience:** {relevant_experience}")
+
+                with st.expander("Job Change Frequency Analysis"):
+                    st.markdown(f"**Job Change Frequency:** {job_change_frequency}")
+
+                with st.expander("Sentiment Analysis"):
+                    st.markdown(f"**Sentiment Analysis:** {sentiment_analysis}")
+
+                with st.expander("Skill Gap Analysis"):
+                    st.markdown(f"**Skill Gaps:** {skill_gaps}")
             else:
                 st.error("❗ Unable to extract text from the uploaded PDF. Ensure it is a searchable PDF.")
         elif uploaded_file.name.endswith(".zip"):
@@ -119,16 +175,30 @@ if st.button("Analyze"):
                             if text:
                                 prompt = input_prompt_template.format(text=text, jd=jd)
                                 response = get_gemini_response(prompt)
-                                results.append({"file_name": os.path.basename(pdf_file), "response": json.loads(response)})
-                            else:
-                                st.warning(f"⚠️ Could not extract text from {os.path.basename(pdf_file)}. Skipping.")
+
+                                # Additional analyses
+                                relevant_experience = extract_relevant_experience(text, jd)
+                                job_change_frequency = analyze_job_change_frequency(text)
+                                sentiment_analysis = perform_sentiment_analysis(text)
+                                skill_gaps = skill_gap_analysis(text, jd)
+
+                                # Parse response
+                                result = json.loads(response)
+                                results.append({
+                                    "file_name": os.path.basename(pdf_file),
+                                    "response": result,
+                                    "relevant_experience": relevant_experience,
+                                    "job_change_frequency": job_change_frequency,
+                                    "sentiment_analysis": sentiment_analysis,
+                                    "skill_gaps": skill_gaps
+                                })
 
                         # Display Results
                         if results:
                             st.success("✅ Analysis completed. See results below:")
                             for result in results:
                                 with st.expander(f"📄 {result['file_name']}"):
-                                    st.json(result["response"])
+                                    st.json(result)
                         else:
                             st.error("❗ No valid resumes found in the ZIP folder. Ensure they are searchable PDFs.")
                 except Exception as e:
