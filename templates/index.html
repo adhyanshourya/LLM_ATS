@@ -5,44 +5,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ATS Resume Analyzer</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
-    <style>
-        body {
-            background: linear-gradient(to right, #6a11cb, #2575fc);
-            color: white;
-        }
-        .card {
-            border: none;
-            border-radius: 15px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-        }
-        .btn-custom {
-            background-color: #2575fc;
-            color: white;
-            border-radius: 25px;
-        }
-        .btn-custom:hover {
-            background-color: #1b5bb5;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/static/base.css">
+    <link rel="stylesheet" href="/static/components.css">
+    <link rel="stylesheet" href="/static/animations.css">
 </head>
 <body>
-    <div class="container mt-5">
-        <h1 class="text-center mb-4">GAVS ATS Resume Analyzer</h1>
+    <div class="container mt-5 page-container">
+        <div class="header-container animate-in">
+            <img src="/static/images/gslab-gavs-logo.png" alt="GSLab GAVS Logo" class="logo">
+            <h1 class="page-title">ATS Resume Analyzer</h1>
+        </div>
+        
         <div class="row justify-content-center">
             <div class="col-md-8 col-lg-6">
-                <div class="card p-4 bg-light">
-                    <h3 class="text-center mb-3">Upload Your Files</h3>
+                <div class="main-card p-4">
+                    <div class="text-center mb-4">
+                        <i class="bi bi-file-earmark-text upload-icon"></i>
+                        <h3 class="text-dark">Upload Your Files</h3>
+                    </div>
+                    
                     <form action="/analyze" method="post" enctype="multipart/form-data">
-                        <div class="mb-3">
-                            <label for="job_description" class="form-label">Job Description</label>
-                            <textarea class="form-control" id="job_description" name="job_description" rows="4" placeholder="Paste the job description here..." required></textarea>
+                        <div class="mb-4">
+                            <label for="job_description" class="form-label text-dark">
+                                <i class="bi bi-file-text me-2"></i>Job Description
+                            </label>
+                            <textarea 
+                                class="form-control"
+                                id="job_description"
+                                name="job_description"
+                                rows="4"
+                                placeholder="Paste the job description here..."
+                                required
+                            ></textarea>
                         </div>
-                        <div class="mb-3">
-                            <label for="resume_files" class="form-label">Upload Resumes (PDF/ZIP)</label>
-                            <input type="file" class="form-control" id="resume_files" name="resume_files" accept=".pdf,.zip" multiple required>
+                        
+                        <div class="mb-4">
+                            <label for="resume_files" class="form-label text-dark">
+                                <i class="bi bi-file-pdf me-2"></i>Upload Resumes (PDF/ZIP)
+                            </label>
+                            <div class="input-group">
+                                <input 
+                                    type="file"
+                                    class="form-control"
+                                    id="resume_files"
+                                    name="resume_files"
+                                    accept=".pdf,.zip"
+                                    multiple
+                                    required
+                                >
+                            </div>
                         </div>
+                        
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-custom">Analyze Resumes</button>
+                            <button type="submit" class="btn-analyze">
+                                <i class="bi bi-search me-2"></i>Analyze Resumes
+                            </button>
                         </div>
                     </form>
                 </div>
