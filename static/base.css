@@ -1,9 +1,13 @@
 /* Base styles */
 :root {
   --primary-color: #007bff;
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.7);
   --background-color: #000000;
   --card-bg: rgba(255, 255, 255, 0.95);
   --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  --gslab-blue: #0066B3;
+  --gavs-red: #E31837;
 }
 
 body {
@@ -12,32 +16,47 @@ body {
   margin: 0;
   padding: 0;
   background-color: var(--background-color);
+  color: var(--text-primary);
+}
+
+html, body {
+  padding-top: 0;
 }
 
 .page-container {
-  animation: fadeIn 0.5s ease-in;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.25rem 0.25rem;
 }
 
 /* Header styles */
 .header-container {
   display: flex;
   align-items: center;
-  margin-bottom: 2rem;
-  padding: 1rem 0;
-  position: relative;
+  justify-content: center; /* Center the title */
+  margin-bottom: 0.5rem;
+  padding: 0.5rem 0;
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
 }
 
 .logo {
-  height: 40px;
-  object-fit: contain;
-  position: absolute;
-  left: 0;
+  height: 32px;
+  width: auto;
 }
 
 .page-title {
+  font-size: 3.5rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, var(--gslab-blue), var(--gavs-red));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
   margin: 0;
-  font-size: 2rem;
-  color: white;
-  width: 100%;
   text-align: center;
+  flex-grow: 0; /* Remove extra space */
 }

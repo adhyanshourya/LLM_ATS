@@ -14,21 +14,23 @@
 <body>
     <div class="container mt-5 page-container">
         <div class="header-container animate-in">
-            <img src="/static/images/gslab-gavs-logo.png" alt="GSLab GAVS Logo" class="logo">
+            <div class="logo-section">
+                <img src="/static/images/gslab-gavs-logo.png" alt="GSLab GAVS Logo" class="logo">
+            </div>
             <h1 class="page-title">ATS Resume Analyzer</h1>
         </div>
         
         <div class="row justify-content-center">
-            <div class="col-md-8 col-lg-6">
-                <div class="main-card p-4">
-                    <div class="text-center mb-4">
+            <div class="col-md-8">
+                <div class="main-card">
+                    <div class="upload-section">
                         <i class="bi bi-file-earmark-text upload-icon"></i>
-                        <h3 class="text-dark">Upload Your Files</h3>
+                        <h3 class="section-title">Upload Your Files</h3>
                     </div>
                     
                     <form action="/analyze" method="post" enctype="multipart/form-data">
                         <div class="mb-4">
-                            <label for="job_description" class="form-label text-dark">
+                            <label for="job_description" class="form-label">
                                 <i class="bi bi-file-text me-2"></i>Job Description
                             </label>
                             <textarea 
@@ -42,7 +44,7 @@
                         </div>
                         
                         <div class="mb-4">
-                            <label for="resume_files" class="form-label text-dark">
+                            <label for="resume_files" class="form-label">
                                 <i class="bi bi-file-pdf me-2"></i>Upload Resumes (PDF/ZIP)
                             </label>
                             <div class="input-group">
