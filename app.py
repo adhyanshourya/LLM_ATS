@@ -30,19 +30,30 @@ def input_pdf_text(file_path):
                 page_content = reader.pages[page].extract_text()
                 if page_content:
                     text += page_content
+            if not text.strip():
+                logging.warning(f"No extractable text found in {file_path}")
             return text
     except Exception as e:
         logging.error(f"Error extracting text from PDF: {e}")
         return None
 
-# Helper function: Recursively list all PDF files in a directory
-def list_pdf_files(directory):
-    pdf_files = []
-    for root, _, files in os.walk(directory):
-        for file in files:
-            if file.lower().endswith(".pdf"):
-                pdf_files.append(os.path.join(root, file))
-    return pdf_files
+# Helper function: Extract text from a plain text file
+def input_txt_text(file_path):
+    try:
+        with open(file_path, "r") as f:
+            return f.read()
+    except Exception as e:
+        logging.error(f"Error extracting text from TXT file: {e}")
+        return None
+
+# Helper function: Recursively list all supported files in a directory
+def list_supported_files(directory, extensions):
+    files = []
+    for root, _, filenames in os.walk(directory):
+        for filename in filenames:
+            if filename.lower().endswith(tuple(extensions)):
+                files.append(os.path.join(root, filename))
+    return files
 
 # Helper function: Get Gemini response
 def get_gemini_response(prompt):
@@ -61,8 +72,11 @@ with a deep understanding of tech fields like software engineering, data science
 and big data engineering. Evaluate the resume based on the given job description.
 Consider the competitive job market and provide assistance for improving resumes.
 
-Assign the percentage matching based on the job description and 
-list missing keywords with high accuracy.
+Primary Skills: {primary_skills}
+Secondary Skills: {secondary_skills}
+
+Assign the percentage matching based on the job description with more weightage for primary skills. 
+List missing keywords with high accuracy.
 
 Resume: {text}
 Job Description: {jd}
@@ -85,7 +99,11 @@ def home():
 def analyze():
     logging.debug("Analyze route hit")
     job_description = request.form.get('job_description')
+    primary_skills = request.form.get('primary_skills', '').split(',')
+    secondary_skills = request.form.get('secondary_skills', '').split(',')
     logging.debug(f"Job Description: {job_description}")
+    logging.debug(f"Primary Skills: {primary_skills}")
+    logging.debug(f"Secondary Skills: {secondary_skills}")
 
     if 'resume_files' not in request.files:
         logging.debug("No files uploaded")
@@ -100,39 +118,39 @@ def analyze():
             file_path = os.path.join(temp_dir, file.filename)
             file.save(file_path)
 
+            text = None
             if file.filename.endswith(".pdf"):
                 text = input_pdf_text(file_path)
-                if text:
-                    prompt = input_prompt_template.format(text=text, jd=job_description)
-                    response = get_gemini_response(prompt)
-                    try:
-                        result = json.loads(response)
-                        result["file_name"] = file.filename
-                        results.append(result)
-                    except json.JSONDecodeError as e:
-                        logging.error(f"Error parsing Gemini response: {e}")
-                        results.append({
-                            "file_name": file.filename,
-                            "error": "Invalid response from Gemini API"
-                        })
+            elif file.filename.endswith(".txt"):
+                text = input_txt_text(file_path)
             elif file.filename.endswith(".zip"):
                 try:
                     with zipfile.ZipFile(file_path, "r") as zip_ref:
                         zip_ref.extractall(temp_dir)
-                    pdf_files = list_pdf_files(temp_dir)
-                    for pdf_file in pdf_files:
-                        text = input_pdf_text(pdf_file)
+                    supported_files = list_supported_files(temp_dir, ['.pdf', '.txt'])
+                    for supported_file in supported_files:
+                        if supported_file.endswith(".pdf"):
+                            text = input_pdf_text(supported_file)
+                        elif supported_file.endswith(".txt"):
+                            text = input_txt_text(supported_file)
                         if text:
-                            prompt = input_prompt_template.format(text=text, jd=job_description)
+                            prompt = input_prompt_template.format(
+                                text=text,
+                                jd=job_description,
+                                primary_skills=', '.join(primary_skills),
+                                secondary_skills=', '.join(secondary_skills)
+                            )
                             response = get_gemini_response(prompt)
                             try:
                                 result = json.loads(response)
-                                result["file_name"] = os.path.basename(pdf_file)
+                                result["file_name"] = os.path.basename(supported_file)
+                                result["primary_skills"] = primary_skills
+                                result["secondary_skills"] = secondary_skills
                                 results.append(result)
                             except json.JSONDecodeError as e:
                                 logging.error(f"Error parsing Gemini response: {e}")
                                 results.append({
-                                    "file_name": os.path.basename(pdf_file),
+                                    "file_name": os.path.basename(supported_file),
                                     "error": "Invalid response from Gemini API"
                                 })
                 except Exception as e:

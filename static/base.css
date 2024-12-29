@@ -19,29 +19,23 @@ body {
   color: var(--text-primary);
 }
 
-html, body {
-  padding-top: 0;
-}
-
 .page-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0.25rem 0.25rem;
+  padding: 1rem;
 }
 
 /* Header styles */
 .header-container {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
-  justify-content: center; /* Center the title */
-  margin-bottom: 0.5rem;
-  padding: 0.5rem 0;
+  gap: 1rem;
+  margin-bottom: 2rem;
 }
 
 .logo-section {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
+  grid-column: 1;
 }
 
 .logo {
@@ -50,7 +44,8 @@ html, body {
 }
 
 .page-title {
-  font-size: 3.5rem;
+  grid-column: 2;
+  font-size: 2.5rem;
   font-weight: 700;
   background: linear-gradient(90deg, var(--gslab-blue), var(--gavs-red));
   -webkit-background-clip: text;
@@ -58,5 +53,4 @@ html, body {
   color: transparent;
   margin: 0;
   text-align: center;
-  flex-grow: 0; /* Remove extra space */
 }

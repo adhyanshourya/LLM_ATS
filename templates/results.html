@@ -25,6 +25,8 @@
                         <tr>
                             <th><i class="bi bi-file-text me-2"></i>File Name</th>
                             <th><i class="bi bi-graph-up me-2"></i>JD Match (%)</th>
+                            <th><i class="bi bi-tools me-2"></i>Primary Skills</th>
+                            <th><i class="bi bi-tools me-2"></i>Secondary Skills</th>
                             <th><i class="bi bi-exclamation-triangle me-2"></i>Missing Keywords</th>
                             <th><i class="bi bi-person-badge me-2"></i>Profile Summary</th>
                         </tr>
@@ -42,6 +44,8 @@
                                     {{ result['JD Match'] }}
                                 </span>
                             </td>
+                            <td>{{ result.primary_skills }}</td>
+                            <td>{{ result.secondary_skills }}</td>
                             <td>{{ result['MissingKeywords'] | join(', ') }}</td>
                             <td>{{ result['Profile Summary'] }}</td>
                         </tr>
@@ -50,7 +54,7 @@
                 </table>
             </div>
             
-            <div class="text-center mt-4">
+            <div class="d-grid mt-4">
                 <a href="/" class="btn-analyze">
                     <i class="bi bi-arrow-left me-2"></i>Analyze More Resumes
                 </a>

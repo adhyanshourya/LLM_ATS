@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="/static/animations.css">
 </head>
 <body>
-    <div class="container mt-5 page-container">
+    <div class="container page-container">
         <div class="header-container animate-in">
             <div class="logo-section">
                 <img src="/static/images/gslab-gavs-logo.png" alt="GSLab GAVS Logo" class="logo">
@@ -29,7 +29,7 @@
                     </div>
                     
                     <form action="/analyze" method="post" enctype="multipart/form-data">
-                        <div class="mb-4">
+                        <div class="mb-3">
                             <label for="job_description" class="form-label">
                                 <i class="bi bi-file-text me-2"></i>Job Description
                             </label>
@@ -37,15 +37,42 @@
                                 class="form-control"
                                 id="job_description"
                                 name="job_description"
-                                rows="4"
+                                rows="3"
                                 placeholder="Paste the job description here..."
                                 required
                             ></textarea>
                         </div>
                         
-                        <div class="mb-4">
+                        <div class="mb-3">
+                            <label for="primary_skills" class="form-label">
+                                <i class="bi bi-tools me-2"></i>Primary Skills
+                            </label>
+                            <input 
+                                type="text"
+                                class="form-control"
+                                id="primary_skills"
+                                name="primary_skills"
+                                placeholder="Enter primary skills (comma-separated)"
+                                required
+                            >
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="secondary_skills" class="form-label">
+                                <i class="bi bi-tools me-2"></i>Secondary Skills
+                            </label>
+                            <input 
+                                type="text"
+                                class="form-control"
+                                id="secondary_skills"
+                                name="secondary_skills"
+                                placeholder="Enter secondary skills (comma-separated)"
+                            >
+                        </div>
+
+                        <div class="mb-3">
                             <label for="resume_files" class="form-label">
-                                <i class="bi bi-file-pdf me-2"></i>Upload Resumes (PDF/ZIP)
+                                <i class="bi bi-file-pdf me-2"></i>Upload Resumes (PDF/TXT/ZIP)
                             </label>
                             <div class="input-group">
                                 <input 
@@ -53,7 +80,7 @@
                                     class="form-control"
                                     id="resume_files"
                                     name="resume_files"
-                                    accept=".pdf,.zip"
+                                    accept=".pdf,.zip,.txt"
                                     multiple
                                     required
                                 >
